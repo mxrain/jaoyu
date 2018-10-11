@@ -6,7 +6,11 @@ from django.db import models
 
 
 # 课程基本信息
+from organization.models import CourseOrg
+
+
 class Course(models.Model):
+    Course_org = models.ForeignKey(CourseOrg, on_delete=models.CASCADE, verbose_name="所属机构", null=True, blank=True)
     name = models.CharField(max_length=50,verbose_name=u"课程名")
     desc = models.CharField(max_length=300, verbose_name=u"课程描述")
     detail = models.TextField(verbose_name=u"课程详情")
@@ -48,6 +52,9 @@ class Video(models.Model):
         verbose_name = u"视频"
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name
+
 
 # 课程资源
 class CourseResource(models.Model):
@@ -59,3 +66,6 @@ class CourseResource(models.Model):
     class Meta:
         verbose_name = u"课程资源"
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name

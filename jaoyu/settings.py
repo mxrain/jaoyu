@@ -30,6 +30,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# 设置 自定义的登录验证邮箱、用户名 类
+AUTHENTICATION_BACKENDS = (
+    'user.views.CustomBackend',
+)
 
 # Application definition
 
@@ -37,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
+    'django.contrib.sessions', # sessions 应用,
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'user',
@@ -46,7 +50,18 @@ INSTALLED_APPS = [
     "operation",
     "xadmin",
     "crispy_forms",
+    "captcha",
+    "pure_pagination", # 分页配置
+
 ]
+# 分页配置
+PAGINATION_SETTINGS = {
+    'PAGE_RANGE_DISPLAYED': 10,
+    'MARGIN_PAGES_DISPLAYED': 2,
+
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True,
+}
+
 AUTH_USER_MODEL = 'user.UserProfile'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -72,6 +87,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                #添加图片处理器，为了在课程列表中前面加上MEDIA_URL
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -114,6 +131,18 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# 发送邮箱
+import configparser
+conf = configparser.ConfigParser()
+conf.read("E:\python_config\jaoyuconfig.ini")
+
+EMAIL_HOST = conf.get("163email","EMAIL_HOST")
+EMAIL_PORT = 25 # 465 # getboolean
+EMAIL_HOST_USER = conf.get("163email","EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = conf.get("163email","EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = False # getint
+EMAIL_FROM = conf.get("163email","EMAIL_FROM")
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -132,3 +161,11 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+
+)
+
+# 设置上传文件的路径
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')   #指定根目录

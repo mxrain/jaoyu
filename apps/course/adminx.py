@@ -19,21 +19,21 @@ class CourseAdmin(object):
 class LessonAdmin(object):
     list_display = ["course","name","add_time"]
     search_fields = ["course","name"]
-    list_filter = ["course","name","add_time"]
+    list_filter = ["course__name","name","add_time"]
 
 
 # 视频admin
 class VideoAdmin(object):
     list_display = ["course","name","add_time"]
     search_fields = ["course","name"]
-    list_filter = ["course","name","add_time"]
+    list_filter = ["course__name","name","add_time"]
 
 
 # 视频资源
 class CourseResourceAdmin(object):
     list_display = ["course","name","download","add_time"]
     search_fields = ["course","name","download"]
-    list_filter = ["course","name","download","add_time"]
+    list_filter = ["course__name","name","download","add_time"]
 
 
 xadmin.site.register(Course,CourseAdmin)
